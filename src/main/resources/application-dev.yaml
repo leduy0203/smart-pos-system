@@ -19,6 +19,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+openapi:
+  service:
+    api-docs: backend-service
+    title: Backend Service API Documentation
+    version: v1.1.0
+    serverUrl: http://localhost:${server.port}
 
 
 
