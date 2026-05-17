@@ -26,6 +26,8 @@ public enum ErrorCode {
 
     ROLE_NOT_FOUND(404, "Role not found", HttpStatus.NOT_FOUND),
 
+    ROLE_ALREADY_EXITS(404, "Role already exits", HttpStatus.BAD_REQUEST),
+
 
     CATEGORY_NOT_FOUND(404, "Category not found", HttpStatus.NOT_FOUND),
 
@@ -118,7 +120,8 @@ public enum ErrorCode {
             500,
             "Internal server error",
             HttpStatus.INTERNAL_SERVER_ERROR
-    );
+    ),
+    PERMISSION_NOT_FOUND(404, "Permission not found" , HttpStatus.NOT_FOUND );
 
     private final int code;
     private final String message;

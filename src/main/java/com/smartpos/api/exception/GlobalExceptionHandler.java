@@ -53,4 +53,26 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(
+            Exception exception,
+            HttpServletRequest request
+    ) {
+
+        log.error(exception.getMessage(), exception);
+
+        ErrorResponse errorResponse =
+                ErrorResponse.builder()
+                        .timestamp(new Date())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .error(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .message("Internal server error")
+                        .path(request.getRequestURI())
+                        .build();
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
+    }
 }

@@ -3,9 +3,11 @@ package com.smartpos.api.service.impl;
 import com.smartpos.api.model.request.CreateUserRequest;
 import com.smartpos.api.model.response.UserResponse;
 import com.smartpos.api.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createUser(CreateUserRequest request) {

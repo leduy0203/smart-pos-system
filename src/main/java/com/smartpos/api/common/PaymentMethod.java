@@ -1,6 +1,6 @@
 package com.smartpos.api.common;
 
-public enum PaymentStatus {
+public enum PaymentMethod {
     CASH,
     CARD,
     MOMO
