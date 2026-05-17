@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "permissions")
+@RestaurantTable(name = "permissions")
 public class Permission extends AbstractEntity<Long> {
 
     @Column(name = "name" , nullable = false , unique = true)
