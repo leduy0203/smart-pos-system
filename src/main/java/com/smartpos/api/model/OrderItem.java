@@ -1,10 +1,7 @@
 package com.smartpos.api.model;
 
 import com.smartpos.api.common.OrderItemStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -35,10 +32,10 @@ public class OrderItem extends AbstractEntity<Long> {
     private OrderItemStatus status;
 
     @ManyToOne
-    @Column(name = "order_id" , nullable = false)
-    private Order orders;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne
-    @Column(name = "product_id" , nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 }

@@ -31,6 +31,7 @@ public enum ErrorCode {
 
     CATEGORY_NOT_FOUND(404, "Category not found", HttpStatus.NOT_FOUND),
 
+    CATEGORY_ALREADY_EXISTS(409, "Category already exits", HttpStatus.CONFLICT),
 
     PRODUCT_NOT_FOUND(404, "Product not found", HttpStatus.NOT_FOUND),
 

@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@RestaurantTable(name = "categories")
+@Table(name = "categories")
 @Getter
 @Setter
 @Builder
@@ -22,5 +22,8 @@ public class Category extends AbstractEntity<Long> {
 
     @OneToMany(mappedBy = "category" , fetch = FetchType.LAZY)
     private List<Product> products;
+
+    @Column(name = "is_active" , nullable = false)
+    private boolean active = true;
 
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 @Setter
 @Builder
 @Entity
-@RestaurantTable(name = "roles")
+@Table(name = "roles")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role extends AbstractEntity<Long> {
