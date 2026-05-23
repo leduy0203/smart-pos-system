@@ -50,12 +50,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         log.info("Supplier created with id: {}", supplier.getId());
-        return SupplierResponse.builder()
-                .id(supplier.getId())
-                .name(supplier.getName())
-                .phone(supplier.getPhone())
-                .address(supplier.getAddress())
-                .build();
+        return toResponse(supplier);
     }
 
     @Override
@@ -84,12 +79,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         log.info("Supplier with id: {} has been updated", id);
-        return SupplierResponse.builder()
-                .id(supplier.getId())
-                .name(supplier.getName())
-                .phone(supplier.getPhone())
-                .address(supplier.getAddress())
-                .build();
+        return toResponse(supplier);
     }
 
     @Override
@@ -99,12 +89,8 @@ public class SupplierServiceImpl implements SupplierService {
         Supplier supplier = getById(id);
 
         log.info("Supplier with id: {} has been retrieved", id);
-        return SupplierResponse.builder()
-                .id(supplier.getId())
-                .name(supplier.getName())
-                .phone(supplier.getPhone())
-                .address(supplier.getAddress())
-                .build();
+
+        return toResponse(supplier);
     }
 
     @Override
@@ -144,5 +130,14 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
+    private SupplierResponse toResponse(Supplier supplier) {
+        return SupplierResponse.builder()
+                .id(supplier.getId())
+                .name(supplier.getName())
+                .phone(supplier.getPhone())
+                .address(supplier.getAddress())
+                .build();
     }
 }

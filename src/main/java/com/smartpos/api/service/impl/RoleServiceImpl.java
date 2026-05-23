@@ -5,8 +5,8 @@ import com.smartpos.api.exception.ErrorCode;
 import com.smartpos.api.model.Permission;
 import com.smartpos.api.model.Role;
 import com.smartpos.api.model.RoleHasPermission;
-import com.smartpos.api.model.mapper.RoleMapper;
 import com.smartpos.api.model.request.UpdateRoleRequest;
+import com.smartpos.api.model.response.PermissionResponse;
 import com.smartpos.api.model.response.RoleResponse;
 import com.smartpos.api.repository.PermissionRepository;
 import com.smartpos.api.repository.RoleRepository;
@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +66,25 @@ public class RoleServiceImpl implements RoleService {
 
         Role updatedRole = this.roleRepository.save(role);
         log.info("Role with id: {} updated successfully", id);
-        return RoleMapper.toRoleResponse(updatedRole);
+        return toRoleResponse(updatedRole);
+    }
+
+
+    private RoleResponse toRoleResponse(Role role){
+        Set<PermissionResponse> permissionResponses = new HashSet<>();
+        role.getRoleHasPermission().forEach(roleHasPermission -> {
+            PermissionResponse permissionResponse = new PermissionResponse();
+            permissionResponse.setId(roleHasPermission.getPermission().getId());
+            permissionResponse.setName(roleHasPermission.getPermission().getName());
+            permissionResponse.setDescription(roleHasPermission.getPermission().getDescription());
+            permissionResponses.add(permissionResponse);
+        });
+        return RoleResponse.builder()
+                .id(role.getId())
+                .name(role.getName())
+                .description(role.getDescription())
+                .isActive(role.isActive())
+                .permissions(permissionResponses.stream().toList())
+                .build();
     }
 }

@@ -35,11 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         category = categoryRepository.save(category);
         log.info("Category created with id: {}", category.getId());
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .description(category.getDescription())
-                .build();
+
+        return toResponse(category);
     }
 
     @Override
@@ -60,11 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         log.info("Category with id: {} has been updated", id);
 
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .description(category.getDescription())
-                .build();
+        return toResponse(category);
     }
 
     @Override
@@ -72,11 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Getting category with id: {}", id);
         Category category = getCategoryByIdOrThrow(id);
 
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .description(category.getDescription())
-                .build();
+        return toResponse(category);
     }
 
     @Override
@@ -94,5 +83,13 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Fetching category with id: {}", id);
         return categoryRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    private CategoryResponse toResponse(Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .build();
     }
 }
