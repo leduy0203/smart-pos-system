@@ -125,7 +125,15 @@ public enum ErrorCode {
             "Internal server error",
             HttpStatus.INTERNAL_SERVER_ERROR
     ),
-    PERMISSION_NOT_FOUND(404, "Permission not found" , HttpStatus.NOT_FOUND );
+    PERMISSION_NOT_FOUND(404, "Permission not found" , HttpStatus.NOT_FOUND ),
+
+    PHONE_NUMBER_ALREADY_EXISTS(409, "Phone number already exists", HttpStatus.CONFLICT),
+
+    USERNAME_ALREADY_EXISTS(409, "Username already exists", HttpStatus.CONFLICT),
+
+    EMAIL_ALREADY_EXISTS(409, "Email already exists", HttpStatus.CONFLICT),
+
+    PASSWORD_MISMATCH(400, "Password and confirm password do not match", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

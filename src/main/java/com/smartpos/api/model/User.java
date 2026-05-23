@@ -7,12 +7,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users" , uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_username",
+                columnNames = "username"
+        ),
+        @UniqueConstraint(
+                name = "uk_email",
+                columnNames = "email"
+        ),
+        @UniqueConstraint(
+                name = "uk_phone_number",
+                columnNames = "phone_number"
+        )
+})
 public class User extends AbstractEntity<Long> {
 
     @Column(name = "username" , unique = true , nullable = false)
@@ -31,9 +44,8 @@ public class User extends AbstractEntity<Long> {
     private String phoneNumber;
 
     @Column(name = "is_active" , nullable = false)
-    private boolean isActive;
+    private boolean active;
 
     @OneToMany(mappedBy = "user" , orphanRemoval = true , cascade = CascadeType.ALL)
     private Set<UserHasRole> userHasRoles = new HashSet<>();
-
 }
