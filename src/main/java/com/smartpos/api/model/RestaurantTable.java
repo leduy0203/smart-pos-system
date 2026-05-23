@@ -2,10 +2,7 @@ package com.smartpos.api.model;
 
 
 import com.smartpos.api.common.TableStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -31,6 +28,7 @@ public class RestaurantTable extends AbstractEntity<Long> {
     @Column(name = "capacity" , nullable = false)
     private int capacity;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status" , nullable = false)
     private TableStatus status;
 

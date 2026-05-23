@@ -51,6 +51,7 @@ public enum ErrorCode {
 
 
     TABLE_NOT_FOUND(404, "Table not found", HttpStatus.NOT_FOUND),
+    TABLE_NUMBER_ALREADY_EXISTS(409 , "Table number already exists", HttpStatus.CONFLICT),
 
     TABLE_OCCUPIED(400, "Table is occupied", HttpStatus.BAD_REQUEST),
 

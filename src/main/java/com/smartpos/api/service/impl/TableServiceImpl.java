@@ -1,5 +1,6 @@
 package com.smartpos.api.service.impl;
 
+import com.smartpos.api.common.TableStatus;
 import com.smartpos.api.exception.AppException;
 import com.smartpos.api.exception.ErrorCode;
 import com.smartpos.api.model.RestaurantTable;
@@ -7,6 +8,7 @@ import com.smartpos.api.model.request.CreateTableRequest;
 import com.smartpos.api.model.response.TableResponse;
 import com.smartpos.api.repository.TableRepository;
 import com.smartpos.api.service.TableService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,17 +24,18 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
 
     @Override
+    @Transactional
     public TableResponse createTable(CreateTableRequest request) {
         log.info("Creating table with number: {}", request.getTableNumber());
 
         if (tableRepository.existsByTableNumber(request.getTableNumber())) {
-            throw new AppException(ErrorCode.INVALID_REQUEST);
+            throw new AppException(ErrorCode.TABLE_NUMBER_ALREADY_EXISTS);
         }
 
         RestaurantTable table = RestaurantTable.builder()
                 .tableNumber(request.getTableNumber())
                 .capacity(request.getCapacity())
-                .status(request.getStatus())
+                .status(TableStatus.AVAILABLE)
                 .build();
 
         try {
@@ -47,6 +50,7 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    @Transactional
     public TableResponse updateTable(Long id, CreateTableRequest request) {
         log.info("Updating table with id: {}", id);
 
@@ -58,7 +62,6 @@ public class TableServiceImpl implements TableService {
 
         table.setTableNumber(request.getTableNumber());
         table.setCapacity(request.getCapacity());
-        table.setStatus(request.getStatus());
 
         try {
             table = tableRepository.save(table);
@@ -123,7 +126,7 @@ public class TableServiceImpl implements TableService {
         String message = rootCause.getMessage();
 
         if (message.contains("uk_table_number")) {
-            throw new AppException(ErrorCode.INVALID_REQUEST);
+            throw new AppException(ErrorCode.TABLE_NUMBER_ALREADY_EXISTS);
         }
 
         throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
