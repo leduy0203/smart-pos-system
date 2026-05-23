@@ -5,6 +5,7 @@ import com.smartpos.api.model.response.CategoryResponse;
 import com.smartpos.api.model.response.ResponseData;
 import com.smartpos.api.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,8 @@ public class CategoryController {
 
     @PutMapping("/categories/{id}")
     @Operation(summary = "Update a category", description = "Updates a category by id")
-    public ResponseData<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody CreateCategoryRequest request){
+    public ResponseData<CategoryResponse> updateCategory(@PathVariable Long id,
+                                                         @Valid @RequestBody CreateCategoryRequest request){
         log.info("Received request to update category with id: {}", id);
 
         CategoryResponse categoryResponse = this.categoryService.updateCategory(id, request);

@@ -46,6 +46,8 @@ public enum ErrorCode {
     ),
 
     SUPPLIER_NOT_FOUND(404, "Supplier not found", HttpStatus.NOT_FOUND),
+    SUPPLIER_ALREADY_EXISTS(400, "Supplier already exists", HttpStatus.CONFLICT),
+    SUPPLIER_PHONE_ALREADY_EXISTS(400, "Supplier phone already exists", HttpStatus.CONFLICT),
 
 
     TABLE_NOT_FOUND(404, "Table not found", HttpStatus.NOT_FOUND),

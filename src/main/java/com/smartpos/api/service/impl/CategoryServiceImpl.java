@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
     @Override
     public CategoryResponse createCategory(CreateCategoryRequest request) {
         log.info("Creating category with name: {}", request.getName());
@@ -42,7 +43,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
     public CategoryResponse updateCategory(Long id, CreateCategoryRequest request) {
 
         log.info("Updating category with id: {}", id);

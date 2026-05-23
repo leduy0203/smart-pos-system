@@ -34,12 +34,12 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorResponse> handleIdentityException(AppException exception, HttpServletRequest request) {
-        log.error(exception.getMessage(), exception);
+        log.warn("Application exception: {}", exception.getMessage());
 
         ErrorCode errorCode = exception.getErrorCode();
 
