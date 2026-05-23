@@ -2,10 +2,7 @@ package com.smartpos.api.model;
 
 
 import com.smartpos.api.common.OrderStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -33,4 +30,9 @@ public class Order extends AbstractEntity<Long> {
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
+
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private RestaurantTable table;
+
 }

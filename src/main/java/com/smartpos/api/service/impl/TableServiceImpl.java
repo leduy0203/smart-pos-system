@@ -36,6 +36,7 @@ public class TableServiceImpl implements TableService {
                 .tableNumber(request.getTableNumber())
                 .capacity(request.getCapacity())
                 .status(TableStatus.AVAILABLE)
+                .active(true)
                 .build();
 
         try {

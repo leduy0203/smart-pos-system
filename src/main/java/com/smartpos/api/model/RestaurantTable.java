@@ -5,6 +5,8 @@ import com.smartpos.api.common.TableStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(
         name = "restaurant_tables",
@@ -33,6 +35,9 @@ public class RestaurantTable extends AbstractEntity<Long> {
     private TableStatus status;
 
     @Column(name = "is_active" , nullable = false)
-    private boolean active;
+    private boolean active = true;
+
+    @OneToMany(mappedBy = "table" , fetch = FetchType.LAZY)
+    private List<Order> orders;
 
 }
