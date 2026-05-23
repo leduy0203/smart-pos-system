@@ -13,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import static com.smartpos.api.exception.ErrorCode.SUPPLIER_ALREADY_EXISTS;
+import static com.smartpos.api.exception.ErrorCode.SUPPLIER_NOT_FOUND;
 
 @Service
 @Slf4j(topic = "SUPPLIER-SERVICE")
@@ -50,6 +51,7 @@ public class SupplierServiceImpl implements SupplierService {
 
         log.info("Supplier created with id: {}", supplier.getId());
         return SupplierResponse.builder()
+                .id(supplier.getId())
                 .name(supplier.getName())
                 .phone(supplier.getPhone())
                 .address(supplier.getAddress())
@@ -83,6 +85,7 @@ public class SupplierServiceImpl implements SupplierService {
 
         log.info("Supplier with id: {} has been updated", id);
         return SupplierResponse.builder()
+                .id(supplier.getId())
                 .name(supplier.getName())
                 .phone(supplier.getPhone())
                 .address(supplier.getAddress())
@@ -117,7 +120,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     private Supplier getById(Long id){
         return supplierRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new AppException(SUPPLIER_ALREADY_EXISTS));
+                .orElseThrow(() -> new AppException(SUPPLIER_NOT_FOUND));
     }
 
     private void handleSupplierConstraintViolation(
