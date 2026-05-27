@@ -3,6 +3,7 @@ package com.smartpos.api.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -24,10 +25,10 @@ public class Product extends AbstractEntity<Long> {
     private String imageUrl;
 
     @Column(name = "selling_price" , nullable = false)
-    private Double sellingPrice;
+    private BigDecimal sellingPrice;
 
     @Column(name = "cost_price" , nullable = false)
-    private Double costPrice;
+    private BigDecimal costPrice;
 
     @Column(name = "target_food_cost_percent")
     private Double targetFoodCostPercent;

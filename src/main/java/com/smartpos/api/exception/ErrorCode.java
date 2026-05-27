@@ -33,9 +33,13 @@ public enum ErrorCode {
 
     CATEGORY_ALREADY_EXISTS(409, "Category already exits", HttpStatus.CONFLICT),
 
+
     PRODUCT_NOT_FOUND(404, "Product not found", HttpStatus.NOT_FOUND),
 
     PRODUCT_UNAVAILABLE(400, "Product is unavailable", HttpStatus.BAD_REQUEST),
+
+    IMAGE_IS_REQUIRE(400, "Image is required", HttpStatus.BAD_REQUEST),
+    INVALID_IMAGE_TYPE(400, "Invalid image type", HttpStatus.BAD_REQUEST),
 
     INGREDIENT_NOT_FOUND(404, "Ingredient not found", HttpStatus.NOT_FOUND),
 
