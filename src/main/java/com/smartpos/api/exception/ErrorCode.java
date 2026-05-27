@@ -57,6 +57,12 @@ public enum ErrorCode {
 
     TABLE_NOT_AVAILABLE(400, "Table is not available", HttpStatus.BAD_REQUEST),
 
+    INVALID_TABLE_STATUS_TRANSITION(
+            400,
+            "Invalid table status transition",
+            HttpStatus.BAD_REQUEST
+    ),
+
 
     ORDER_NOT_FOUND(404, "Order not found", HttpStatus.NOT_FOUND),
 

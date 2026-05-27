@@ -32,6 +32,7 @@ openapi:
     version: v1.1.0
     serverUrl: http://localhost:${server.port}
 
-
-
-
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}

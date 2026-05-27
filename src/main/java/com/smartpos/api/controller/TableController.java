@@ -1,6 +1,7 @@
 package com.smartpos.api.controller;
 
 import com.smartpos.api.model.request.CreateTableRequest;
+import com.smartpos.api.model.request.UpdateTableStatusRequest;
 import com.smartpos.api.model.response.ResponseData;
 import com.smartpos.api.model.response.TableResponse;
 import com.smartpos.api.service.TableService;
@@ -87,6 +88,24 @@ public class TableController {
         return ResponseData.<Void>builder()
                 .code(200)
                 .message("Table deleted successfully")
+                .build();
+    }
+
+    @PatchMapping("/tables/{id}/status")
+    @Operation(summary = "Update table status",
+            description = "Updates only the table status with validation for valid transitions")
+    public ResponseData<TableResponse> updateTableStatus(@PathVariable Long id,
+                                                         @Valid @RequestBody UpdateTableStatusRequest request) {
+        log.info("Received request to update table status with id: {} to status: {}", id, request.getStatus());
+
+        this.tableService.updateTableStatus(id, request.getStatus());
+
+        TableResponse tableResponse = this.tableService.getTableById(id);
+
+        return ResponseData.<TableResponse>builder()
+                .code(200)
+                .message("Table status updated successfully")
+                .data(tableResponse)
                 .build();
     }
 }

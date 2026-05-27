@@ -102,6 +102,46 @@ public class TableServiceImpl implements TableService {
         log.info("Table with id: {} has been deleted", id);
     }
 
+    @Override
+    @Transactional
+    public void updateTableStatus(Long id, TableStatus status) {
+        log.info("Updating table status with id: {} to status: {}", id, status);
+
+        RestaurantTable table = getTableByIdOrThrow(id);
+
+        validateStatusTransition(table.getStatus(), status);
+
+        table.setStatus(status);
+
+        tableRepository.save(table);
+
+        log.info("Table with id: {} has been updated to status: {}", id, status);
+    }
+
+
+    private void validateStatusTransition(TableStatus currentStatus, TableStatus newStatus) {
+        log.debug("Validating table status transition from {} to {}", currentStatus, newStatus);
+
+        if (currentStatus == newStatus) {
+            log.warn("Cannot transition to the same status: {}", currentStatus);
+            throw new AppException(ErrorCode.INVALID_TABLE_STATUS_TRANSITION);
+        }
+
+        boolean isValidTransition = switch (currentStatus) {
+            case AVAILABLE -> newStatus == TableStatus.OCCUPIED || newStatus == TableStatus.RESERVED;
+            case OCCUPIED, RESERVED -> newStatus == TableStatus.AVAILABLE;
+            default -> false;
+        };
+
+        if (!isValidTransition) {
+            log.warn("Invalid table status transition from {} to {}", currentStatus, newStatus);
+            throw new AppException(ErrorCode.INVALID_TABLE_STATUS_TRANSITION);
+        }
+
+        log.debug("Status transition from {} to {} is valid", currentStatus, newStatus);
+    }
+
+
     private RestaurantTable getTableByIdOrThrow(Long id) {
         log.info("Fetching table with id: {}", id);
         return tableRepository.findByIdAndActiveTrue(id)

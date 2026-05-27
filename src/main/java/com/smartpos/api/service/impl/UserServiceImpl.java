@@ -6,6 +6,7 @@ import com.smartpos.api.exception.ErrorCode;
 import com.smartpos.api.model.Role;
 import com.smartpos.api.model.User;
 import com.smartpos.api.model.UserHasRole;
+import com.smartpos.api.model.request.ChangePasswordRequest;
 import com.smartpos.api.model.request.CreateUserRequest;
 import com.smartpos.api.model.request.UpdateUserRequest;
 import com.smartpos.api.model.response.UserResponse;
@@ -16,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -30,6 +32,8 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UserResponse createUser(CreateUserRequest request) {
@@ -41,7 +45,7 @@ public class UserServiceImpl implements UserService {
                 .userName(request.getUserName())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .active(true)
                 .build();
 
@@ -72,44 +76,136 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUser(UpdateUserRequest request) {
-        return null;
+    @Transactional(rollbackOn = Exception.class)
+    public UserResponse updateUser(Long id, UpdateUserRequest request) {
+        log.info("Updating user with id: {}", id);
+
+        User user = getUserByIdOrThrow(id);
+
+        validateUniqueFields(user.getUserName(), request.getEmail(), 
+                           request.getPhoneNumber(), id);
+
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+
+        Set<UserHasRole> updatedRoles = new HashSet<>();
+        for (Long roleId : request.getRoleIds()) {
+            Role role = roleRepository.findById(roleId)
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+            updatedRoles.add(UserHasRole.builder()
+                    .user(user)
+                    .role(role)
+                    .build());
+        }
+        user.setUserHasRoles(updatedRoles);
+
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            handleUserConstraintViolation(e);
+        }
+
+        log.info("User id: {} has been updated", id);
+        return toResponse(user);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void changePassword(Long id, ChangePasswordRequest request) {
+        log.info("Changing password for user id: {}", id);
+
+        User user = getUserByIdOrThrow(id);
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            log.warn("Old password mismatch for user id: {}", id);
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        validatePasswordMatch(request.getNewPassword(), request.getConfirmPassword());
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        log.info("Password changed successfully for user id: {}", id);
     }
 
     @Override
     public UserResponse getUserById(Long id) {
-        return null;
+        log.info("Getting user with id: {}", id);
+        User user = getUserByIdOrThrow(id);
+        return toResponse(user);
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void deleteUser(Long id) {
+        log.info("Deleting user with id: {}", id);
 
+        User user = getUserByIdOrThrow(id);
+        user.setActive(false);
+        userRepository.save(user);
+
+        log.info("User id: {} has been deleted", id);
     }
 
     private User getUserByIdOrThrow(Long id) {
         return userRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
     private void validateCreateUserRequest(CreateUserRequest request) {
+        log.debug("Validating create user request for username: {}", request.getUserName());
 
-        if (request.getRoleIds() == null ) {
+        if (request.getRoleIds() == null || request.getRoleIds().length == 0) {
             throw new AppException(ErrorCode.INVALID_REQUEST);
         }
 
-        if (userRepository.existsByUserName(request.getUserName())) {
-            throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
+        validateUniqueFields(request.getUserName(), request.getEmail(),
+                            request.getPhoneNumber(), null);
+
+        validatePasswordMatch(request.getPassword(), request.getConfirmPassword());
+    }
+
+
+    private void validateUniqueFields(String username, String email,
+                                     String phone, Long excludeUserId) {
+        log.debug("Validating unique fields");
+
+        if (excludeUserId == null) {
+
+            if (userRepository.existsByUserName(username)) {
+                throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
+            }
+            if (userRepository.existsByEmail(email)) {
+                throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+            }
+            if (userRepository.existsByPhoneNumber(phone)) {
+                throw new AppException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS);
+            }
+
+        } else {
+
+            if (userRepository.existsByUserNameAndIdNot(username, excludeUserId)) {
+                throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
+            }
+            if (userRepository.existsByEmailAndIdNot(email, excludeUserId)) {
+                throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+            }
+            if (userRepository.existsByPhoneNumberAndIdNot(phone, excludeUserId)) {
+                throw new AppException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS);
+            }
+        }
+    }
+
+    private void validatePasswordMatch(String password, String confirmPassword) {
+        log.debug("Validating password match");
+
+        if (password == null || confirmPassword == null) {
+            throw new AppException(ErrorCode.INVALID_REQUEST);
         }
 
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
-        }
-
-        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new AppException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS);
-        }
-
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
+        if (!password.equals(confirmPassword)) {
             throw new AppException(ErrorCode.PASSWORD_MISMATCH);
         }
     }
