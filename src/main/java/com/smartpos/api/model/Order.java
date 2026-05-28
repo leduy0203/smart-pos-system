@@ -27,6 +27,7 @@ public class Order extends AbstractEntity<Long> {
     private BigDecimal totalPrice;
 
     @Column(name = "status" , nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL , orphanRemoval = true)

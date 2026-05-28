@@ -31,6 +31,7 @@ public class OrderItem extends AbstractEntity<Long> {
     private BigDecimal subTotal;
 
     @Column(name = "status" , nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderItemStatus status;
 
     @Column(name = "note", length = 255)
