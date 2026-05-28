@@ -6,6 +6,7 @@ import com.smartpos.api.model.response.ResponseData;
 import com.smartpos.api.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
     @PostMapping("/categories")
     @Operation(summary = "Create a new category", description = "Creates a new category with name & des.")
     public ResponseData<CategoryResponse> createCategory(@RequestBody CreateCategoryRequest request){
@@ -34,7 +36,7 @@ public class CategoryController {
 
     @DeleteMapping("/categories/{id}")
     @Operation(summary = "Delete a category", description = "Deletes a category by id")
-    public ResponseData<Void> deleteCategory(@PathVariable Long id){
+    public ResponseData<Void> deleteCategory(@Min(1) @PathVariable Long id){
         log.info("Received request to delete category with id: {}", id);
 
         this.categoryService.deleteCategory(id);
@@ -47,7 +49,7 @@ public class CategoryController {
 
     @PutMapping("/categories/{id}")
     @Operation(summary = "Update a category", description = "Updates a category by id")
-    public ResponseData<CategoryResponse> updateCategory(@PathVariable Long id,
+    public ResponseData<CategoryResponse> updateCategory(@Min(1) @PathVariable Long id,
                                                          @Valid @RequestBody CreateCategoryRequest request){
         log.info("Received request to update category with id: {}", id);
 
