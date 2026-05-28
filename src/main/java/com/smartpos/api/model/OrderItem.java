@@ -4,6 +4,8 @@ import com.smartpos.api.common.OrderItemStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "order_items")
 @Getter
@@ -17,19 +19,22 @@ public class OrderItem extends AbstractEntity<Long> {
     private String productName;
 
     @Column(name = "unit_price" , nullable = false)
-    private Double unitPrice;
+    private BigDecimal unitPrice;
 
     @Column(name = "cost_price" , nullable = false)
-    private Double costPrice;
+    private BigDecimal costPrice;
 
     @Column(name = "quantity" , nullable = false)
     private Integer quantity;
 
     @Column(name = "sub_total" , nullable = false)
-    private Double subTotal;
+    private BigDecimal subTotal;
 
     @Column(name = "status" , nullable = false)
     private OrderItemStatus status;
+
+    @Column(name = "note", length = 255)
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

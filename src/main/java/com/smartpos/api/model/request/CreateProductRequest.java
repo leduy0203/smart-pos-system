@@ -16,11 +16,11 @@ public class CreateProductRequest {
     @NotBlank(message = "Product description must not be blank")
     private String description;
 
-    @NotBlank(message = "Selling price must not be blank")
+    @NotNull(message = "Selling price must not be blank")
     @Positive
     private BigDecimal sellingPrice;
 
-    @NotBlank(message = "Cost price must not be blank")
+    @NotNull(message = "Cost price must not be blank")
     @Positive
     private BigDecimal costPrice;
 

@@ -5,6 +5,7 @@ import com.smartpos.api.common.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -20,15 +21,15 @@ public class Order extends AbstractEntity<Long> {
     private String orderCode;
 
     @Column(name = "subtotal" , nullable = false)
-    private Double subTotal;
+    private BigDecimal subTotal;
 
     @Column(name = "total_price" , nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(name = "status" , nullable = false)
     private OrderStatus status;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     @ManyToOne
