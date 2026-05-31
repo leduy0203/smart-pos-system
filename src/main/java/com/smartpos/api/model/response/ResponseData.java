@@ -13,7 +13,7 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> implements Serializable {
 
-    private int code;
+    private long code;
     private String message;
     private transient T data;
 }

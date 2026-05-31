@@ -26,13 +26,20 @@ public enum ErrorCode {
 
     ROLE_NOT_FOUND(404, "Role not found", HttpStatus.NOT_FOUND),
 
+    ROLE_ALREADY_EXITS(404, "Role already exits", HttpStatus.BAD_REQUEST),
+
 
     CATEGORY_NOT_FOUND(404, "Category not found", HttpStatus.NOT_FOUND),
+
+    CATEGORY_ALREADY_EXISTS(409, "Category already exits", HttpStatus.CONFLICT),
 
 
     PRODUCT_NOT_FOUND(404, "Product not found", HttpStatus.NOT_FOUND),
 
     PRODUCT_UNAVAILABLE(400, "Product is unavailable", HttpStatus.BAD_REQUEST),
+
+    IMAGE_IS_REQUIRE(400, "Image is required", HttpStatus.BAD_REQUEST),
+    INVALID_IMAGE_TYPE(400, "Invalid image type", HttpStatus.BAD_REQUEST),
 
     INGREDIENT_NOT_FOUND(404, "Ingredient not found", HttpStatus.NOT_FOUND),
 
@@ -43,13 +50,22 @@ public enum ErrorCode {
     ),
 
     SUPPLIER_NOT_FOUND(404, "Supplier not found", HttpStatus.NOT_FOUND),
+    SUPPLIER_ALREADY_EXISTS(400, "Supplier already exists", HttpStatus.CONFLICT),
+    SUPPLIER_PHONE_ALREADY_EXISTS(400, "Supplier phone already exists", HttpStatus.CONFLICT),
 
 
     TABLE_NOT_FOUND(404, "Table not found", HttpStatus.NOT_FOUND),
+    TABLE_NUMBER_ALREADY_EXISTS(409 , "Table number already exists", HttpStatus.CONFLICT),
 
     TABLE_OCCUPIED(400, "Table is occupied", HttpStatus.BAD_REQUEST),
 
     TABLE_NOT_AVAILABLE(400, "Table is not available", HttpStatus.BAD_REQUEST),
+
+    INVALID_TABLE_STATUS_TRANSITION(
+            400,
+            "Invalid table status transition",
+            HttpStatus.BAD_REQUEST
+    ),
 
 
     ORDER_NOT_FOUND(404, "Order not found", HttpStatus.NOT_FOUND),
@@ -65,6 +81,8 @@ public enum ErrorCode {
             "Order item already served",
             HttpStatus.BAD_REQUEST
     ),
+
+    ORDER_NOT_COMPLETE(400, "Order is not complete", HttpStatus.BAD_REQUEST),
 
     INVALID_ORDER_STATUS(
             400,
@@ -87,6 +105,8 @@ public enum ErrorCode {
             "Invalid payment method",
             HttpStatus.BAD_REQUEST
     ),
+
+    INSUFFICIENT_AMOUNT(400, "Insufficient amount received", HttpStatus.BAD_REQUEST),
 
     DISCOUNT_NOT_FOUND(404, "Discount not found", HttpStatus.NOT_FOUND),
 
@@ -118,7 +138,18 @@ public enum ErrorCode {
             500,
             "Internal server error",
             HttpStatus.INTERNAL_SERVER_ERROR
-    );
+    ),
+    PERMISSION_NOT_FOUND(404, "Permission not found" , HttpStatus.NOT_FOUND ),
+
+    PHONE_NUMBER_ALREADY_EXISTS(409, "Phone number already exists", HttpStatus.CONFLICT),
+
+    USERNAME_ALREADY_EXISTS(409, "Username already exists", HttpStatus.CONFLICT),
+
+    EMAIL_ALREADY_EXISTS(409, "Email already exists", HttpStatus.CONFLICT),
+
+    PASSWORD_MISMATCH(400, "Password and confirm password do not match", HttpStatus.BAD_REQUEST),
+
+    INVALID_SIGNATURE(400, "Invalid signature", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;
