@@ -26,6 +26,10 @@ public class Order extends AbstractEntity<Long> {
     @Column(name = "total_price" , nullable = false)
     private BigDecimal totalPrice;
 
+    public BigDecimal getTotalAmount() {
+        return this.totalPrice;
+    }
+
     @Column(name = "status" , nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

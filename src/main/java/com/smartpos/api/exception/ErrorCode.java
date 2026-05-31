@@ -82,6 +82,8 @@ public enum ErrorCode {
             HttpStatus.BAD_REQUEST
     ),
 
+    ORDER_NOT_COMPLETE(400, "Order is not complete", HttpStatus.BAD_REQUEST),
+
     INVALID_ORDER_STATUS(
             400,
             "Invalid order status transition",
@@ -103,6 +105,8 @@ public enum ErrorCode {
             "Invalid payment method",
             HttpStatus.BAD_REQUEST
     ),
+
+    INSUFFICIENT_AMOUNT(400, "Insufficient amount received", HttpStatus.BAD_REQUEST),
 
     DISCOUNT_NOT_FOUND(404, "Discount not found", HttpStatus.NOT_FOUND),
 
@@ -143,7 +147,9 @@ public enum ErrorCode {
 
     EMAIL_ALREADY_EXISTS(409, "Email already exists", HttpStatus.CONFLICT),
 
-    PASSWORD_MISMATCH(400, "Password and confirm password do not match", HttpStatus.BAD_REQUEST);
+    PASSWORD_MISMATCH(400, "Password and confirm password do not match", HttpStatus.BAD_REQUEST),
+
+    INVALID_SIGNATURE(400, "Invalid signature", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;

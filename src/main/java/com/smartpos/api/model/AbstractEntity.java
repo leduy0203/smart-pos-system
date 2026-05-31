@@ -22,11 +22,11 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
 
     @CreatedBy
     @Column(name = "created_by")
-    protected LocalDateTime createdBy;
+    protected String createdBy;
 
     @LastModifiedBy
     @Column(name = "updated_by")
-    protected LocalDateTime updatedBy;
+    protected String updatedBy;
 
     @CreationTimestamp
     @Column(name = "created_at")
