@@ -15,10 +15,6 @@ public class CreateOrderRequest {
     @Min(value = 1, message = "Table ID must be a positive number")
     private Long tableId;
 
-    @NotNull(message = "Created by user ID must not be null")
-    @Min(value = 1, message = "Created by user ID must be a positive number")
-    private Long createdByUserId;
-
     @NotEmpty(message = "Order items must not be empty")
     @Valid
     private List<CreateOrderItemRequest> orderItems;

@@ -39,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final ProductRepository productRepository;
 
+    private final Long userId = 1L;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public OrderResponse createOrder(CreateOrderRequest request) {
