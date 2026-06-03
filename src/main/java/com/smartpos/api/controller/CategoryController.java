@@ -2,6 +2,7 @@ package com.smartpos.api.controller;
 
 import com.smartpos.api.model.request.CreateCategoryRequest;
 import com.smartpos.api.model.response.CategoryResponse;
+import com.smartpos.api.model.response.PageResponse;
 import com.smartpos.api.model.response.ResponseData;
 import com.smartpos.api.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -73,6 +77,21 @@ public class CategoryController {
                 .code(200)
                 .message("Category retrieved successfully")
                 .data(categoryResponse)
+                .build();
+    }
+
+
+    @GetMapping("/categories")
+    @Operation(summary = "Get all categories", description = "Gets all categories")
+    public ResponseData<List<CategoryResponse>> getAllCategories() {
+        log.info("Received request to get all categories");
+
+        List<CategoryResponse> categories = categoryService.getAll();
+
+        return ResponseData.<List<CategoryResponse>>builder()
+                .code(200)
+                .message("Categories retrieved successfully")
+                .data(categories)
                 .build();
     }
 }

@@ -7,4 +7,5 @@ public interface OrderService {
 
     OrderResponse createOrder(CreateOrderRequest request);
 
+    OrderResponse getOrderDetail(Long id);
 }

@@ -82,6 +82,16 @@ public enum ErrorCode {
             HttpStatus.BAD_REQUEST
     ),
 
+
+    ORDER_ITEM_ALREADY_COOKING(
+            400,
+            "Order item already cooking",
+            HttpStatus.BAD_REQUEST
+    ),
+
+
+    ORDER_ITEM_ALREADY_CANCELLED(400, "Order item already cancelled", HttpStatus.BAD_REQUEST),
+
     ORDER_NOT_COMPLETE(400, "Order is not complete", HttpStatus.BAD_REQUEST),
 
     INVALID_ORDER_STATUS(

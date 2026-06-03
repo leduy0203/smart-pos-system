@@ -124,7 +124,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductDetail(Long id) {
-        return null;
+        Product product = getProduct(id);
+        return toResponse(product);
     }
 
 
