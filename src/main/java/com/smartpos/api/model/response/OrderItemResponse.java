@@ -15,5 +15,6 @@ public class OrderItemResponse {
     private Integer quantity;
     private OrderItemStatus status;
     private BigDecimal subTotal;
+    private String imageUrl;
     private String note;
 }

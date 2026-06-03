@@ -39,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final ProductRepository productRepository;
 
+    private final Long userId = 1L;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public OrderResponse createOrder(CreateOrderRequest request) {
@@ -93,6 +95,30 @@ public class OrderServiceImpl implements OrderService {
         log.info("Order created with ID: {}", order.getId());
 
 
+        return toResponse(order);
+    }
+
+    @Override
+    public OrderResponse getOrderDetail(Long id) {
+        log.info("Get order detail by id :{} " , id);
+
+        Order order = getOrder(id);
+
+        return toResponse(order);
+    }
+
+    private String generateOrderCode() {
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        long seq = System.currentTimeMillis();
+        return "ORD-" + date + "-" + String.format("%04d", seq % 10000);
+    }
+
+    private Order getOrder(Long id){
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+    }
+
+    private OrderResponse toResponse(Order order){
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderCode(order.getOrderCode())
@@ -105,14 +131,9 @@ public class OrderServiceImpl implements OrderService {
                         .quantity(item.getQuantity())
                         .status(item.getStatus())
                         .subTotal(item.getSubTotal())
+                        .imageUrl(item.getProduct().getImageUrl())
                         .note(item.getNote())
                         .build()).toList())
                 .build();
-    }
-
-    private String generateOrderCode() {
-        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        long seq = System.currentTimeMillis();
-        return "ORD-" + date + "-" + String.format("%04d", seq % 10000);
     }
 }

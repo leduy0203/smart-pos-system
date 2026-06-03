@@ -33,4 +33,19 @@ public class OrderController {
                 .data(orderResponse)
                 .build();
     }
+
+    @GetMapping("orders/{id}")
+    @Operation(summary = "Get order by id"
+            , description = "Gets an order by id with order items and their status")
+    public ResponseData<OrderResponse> getOrderDetail(@PathVariable Long id){
+        log.info("Received request to get order detail with id: {}", id);
+
+        OrderResponse orderResponse = orderService.getOrderDetail(id);
+
+        return ResponseData.<OrderResponse>builder()
+                .code(201)
+                .message("Order fetched successfully")
+                .data(orderResponse)
+                .build();
+    }
 }

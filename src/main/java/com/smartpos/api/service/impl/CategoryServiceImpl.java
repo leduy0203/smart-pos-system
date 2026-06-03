@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "CATEGORY-SERVICE")
@@ -79,6 +81,17 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Category with id: {} has been deleted", id);
     }
 
+    @Override
+    public List<CategoryResponse> getAll() {
+
+        log.info("Getting all categories");
+        List<Category> categories = categoryRepository.findAllByActiveTrue();
+
+        return categories.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     private Category getCategoryByIdOrThrow(Long id) {
         log.info("Fetching category with id: {}", id);
         return categoryRepository.findByIdAndActiveTrue(id)
@@ -92,4 +105,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .description(category.getDescription())
                 .build();
     }
+
+
 }
